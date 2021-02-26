@@ -6,46 +6,49 @@
 trigger:
 - master
 
+stages:
+- stage: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '10.x'
+      displayName: 'Install Node.js'
 
-jobs:
-- job: Build
-  displayName: Build
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.x'
-    displayName: 'Install Node.js'
+    - script: |
+        npm install
+        npm run build --if-present
+      displayName: 'npm install, build and test'
 
-  - script: |
-      npm install
-      npm run build --if-present
-    displayName: 'npm install, build and test'
+    - task: CopyFiles@2
+      displayName: 'Copy Files'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+          **\*.js
+          package.json
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-  - task: CopyFiles@2
-    displayName: 'Copy Files'
-    inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)'
-      Contents: |
-        **\*.js
-        package.json
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Build Artifacts'
-    inputs:
-      pathToPublish: $(Build.ArtifactStagingDirectory)
-      artifactName: MyBuildOutputs
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build Artifacts'
+      inputs:
+        pathToPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: MyBuildOutputs
       
-  
-- deployment: VMDeploy
-  displayName: web
-  pool:
-    vmImage: 'Ubuntu-16.04'
-  environment:
-    name: Development
-    resourceType: VirtualMachine
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-          - script: echo my first deployment
+
+- stage: Deploy stage
+  jobs:
+  - deployment: VMDeploy
+    displayName: web
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    environment:
+      name: Development
+      resourceType: VirtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo my first deployment
