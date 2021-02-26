@@ -38,17 +38,17 @@ stages:
         artifactName: MyBuildOutputs
       
 
-- stage: Deploy_stage
-  jobs:
-  - deployment: VMDeploy
-    displayName: web
-    pool:
-      vmImage: 'Ubuntu-16.04'
-    environment:
-      name: Development
-      resourceType: VirtualMachine
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-            - script: echo my first deployment
+# - stage: Deploy_stage
+#   jobs:
+#   - deployment: VMDeploy
+#     displayName: web
+#     pool:
+#       vmImage: 'Ubuntu-16.04'
+#     environment:
+#       name: Development
+#       resourceType: VirtualMachine
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#             - script: echo my first deployment
