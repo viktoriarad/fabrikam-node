@@ -39,7 +39,7 @@ jobs:
   pool:
     vmImage: 'Ubuntu-16.04'
   environment:
-    name: cvcreator-dev
+    name: Development
     resourceType: VirtualMachine
   strategy:
     runOnce:
