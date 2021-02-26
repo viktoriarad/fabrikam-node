@@ -7,7 +7,7 @@ trigger:
 - master
 
 stages:
-- stage: Build stage
+- stage: Build_stage
   jobs:
   - job: Build
     displayName: Build
@@ -38,7 +38,7 @@ stages:
         artifactName: MyBuildOutputs
       
 
-- stage: Deploy stage
+- stage: Deploy_stage
   jobs:
   - deployment: VMDeploy
     displayName: web
